@@ -45,6 +45,10 @@ vk-api:
 subscription:
   cache-ttl-minutes: 60       # Кеш статуса подписки (минуты)
   check-on-new-device: true   # Проверять подписку при подключении нового устройства
+  device-scan-interval-minutes: 5    # Интервал сканирования устройств (минуты)
+  device-scan-initial-delay-minutes: 1  # Начальная задержка сканирования
+  cache-refresh-interval-hours: 1    # Интервал обновления кеша (часы)
+  cache-refresh-initial-delay-minutes: 30  # Начальная задержка обновления
   notification-message: |
     Привет! Для получения полного доступа в интернет, 
     пожалуйста, подпишись на нашу группу ВКонтакте.

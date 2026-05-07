@@ -12,7 +12,6 @@ import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
-import io.netty.util.CharsetUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,7 +25,7 @@ public class ProxyHandler extends SimpleChannelInboundHandler<HttpRequest> {
     private final AccessController accessController;
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, HttpRequest request) throws Exception {
+    protected void channelRead0(ChannelHandlerContext ctx, HttpRequest request) {
         // Получаем MAC адрес из источника соединения
         InetSocketAddress remoteAddress = (InetSocketAddress) ctx.channel().remoteAddress();
         String clientIp = remoteAddress.getAddress().getHostAddress();
@@ -149,12 +148,49 @@ public class ProxyHandler extends SimpleChannelInboundHandler<HttpRequest> {
     }
 
     /**
-     * Извлекает MAC адрес по IP (заглушка)
-     * В реальной реализации нужно использовать ARP таблицу
+     * Извлекает MAC адрес по IP из ARP таблицы системы
      */
     private String extractMacAddress(String ipAddress) {
-        // TODO: Реализовать получение MAC адреса из ARP таблицы
-        log.debug("Extracting MAC for IP: {}", ipAddress);
+        try {
+            log.debug("Extracting MAC for IP: {}", ipAddress);
+
+            // Попытаемся получить MAC адрес из ARP таблицы
+            String osName = System.getProperty("os.name").toLowerCase();
+            String command;
+
+            if (osName.contains("win")) {
+                // Для Windows
+                command = "arp -a " + ipAddress;
+            } else {
+                // Для Linux/Mac
+                command = "arp -an | grep " + ipAddress;
+            }
+
+            Process process = Runtime.getRuntime().exec(command);
+            java.io.BufferedReader reader = new java.io.BufferedReader(
+                    new java.io.InputStreamReader(process.getInputStream())
+            );
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // Ищем MAC адрес в формате XX:XX:XX:XX:XX:XX или XX-XX-XX-XX-XX-XX
+                java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(
+                        "([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})"
+                );
+                java.util.regex.Matcher matcher = pattern.matcher(line);
+                if (matcher.find()) {
+                    String mac = matcher.group().toUpperCase();
+                    log.debug("Found MAC for IP {}: {}", ipAddress, mac);
+                    return mac;
+                }
+            }
+            reader.close();
+            process.waitFor();
+
+        } catch (Exception e) {
+            log.debug("Error extracting MAC address", e);
+        }
+
         return null;
     }
 }

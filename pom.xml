@@ -69,6 +69,13 @@
             <version>2.10.1</version>
         </dependency>
 
+        <!-- Guava для кеширования -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>32.1.3-jre</version>
+        </dependency>
+
         <!-- SSH клиент для роутера -->
         <dependency>
             <groupId>com.jcraft</groupId>
