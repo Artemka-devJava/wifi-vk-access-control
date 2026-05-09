@@ -49,11 +49,6 @@
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.43.2.2</version>
         </dependency>
-        <dependency>
-            <groupId>org.hibernate.dialect</groupId>
-            <artifactId>hibernate-dialect-sqlite</artifactId>
-            <version>2.1.1</version>
-        </dependency>
 
         <!-- HTTP клиент для VK API -->
         <dependency>
@@ -94,6 +89,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-logging</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
         </dependency>
 
         <!-- Утилиты -->

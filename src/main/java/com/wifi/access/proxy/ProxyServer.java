@@ -13,17 +13,19 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpResponseEncoder;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import java.net.InetSocketAddress;
 
 @Component
-@Slf4j
 @RequiredArgsConstructor
 public class ProxyServer {
 
+    private static final Logger log = LoggerFactory.getLogger(ProxyServer.class);
     private final ProxyConfig proxyConfig;
     private final AccessController accessController;
     private EventLoopGroup bossGroup;
@@ -49,11 +51,15 @@ public class ProxyServer {
                         }
                     });
 
-            serverChannel = bootstrap.bind(proxyConfig.getListenAddress(), proxyConfig.getPort())
+            Integer port = proxyConfig.getPort() != null ? proxyConfig.getPort() : 8888;
+            String listenAddress = proxyConfig.getListenAddress() != null ? proxyConfig.getListenAddress() : "0.0.0.0";
+
+            InetSocketAddress bindAddress = new InetSocketAddress(listenAddress, port);
+            serverChannel = bootstrap.bind(bindAddress)
                     .sync()
                     .channel();
 
-            log.info("Proxy server started on {}:{}", proxyConfig.getListenAddress(), proxyConfig.getPort());
+            log.info("Proxy server started on {}:{}", listenAddress, port);
         } catch (Exception e) {
             log.error("Failed to start proxy server", e);
             throw new RuntimeException("Failed to start proxy server", e);

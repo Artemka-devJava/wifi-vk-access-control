@@ -5,7 +5,8 @@ import com.wifi.access.entity.User;
 import com.wifi.access.repository.AccessLogRepository;
 import com.wifi.access.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +24,10 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/stats")
-@Slf4j
 @RequiredArgsConstructor
 public class StatsController {
+
+    private static final Logger log = LoggerFactory.getLogger(StatsController.class);
 
     private final UserRepository userRepository;
     private final AccessLogRepository accessLogRepository;

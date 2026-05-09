@@ -5,26 +5,34 @@ import com.google.gson.JsonParser;
 import com.wifi.access.config.VkApiConfig;
 import com.wifi.access.exception.VkApiException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 @Component
-@Slf4j
 @RequiredArgsConstructor
 public class VkApiClient {
 
+    private static final Logger log = LoggerFactory.getLogger(VkApiClient.class);
     private final VkApiConfig config;
-    private final OkHttpClient httpClient = new OkHttpClient.Builder()
-            .connectTimeout(10, TimeUnit.SECONDS)
-            .writeTimeout(10, TimeUnit.SECONDS)
-            .readTimeout(10, TimeUnit.SECONDS)
-            .build();
+    private OkHttpClient httpClient;
+
+    public VkApiClient(VkApiConfig config) {
+        this.config = config;
+        this.httpClient = new OkHttpClient.Builder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
+                .build();
+    }
 
     /**
      * Проверяет, подписан ли пользователь на группу

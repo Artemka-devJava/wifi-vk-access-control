@@ -4,7 +4,8 @@ import com.wifi.access.config.RouterConfig;
 import com.wifi.access.entity.User;
 import com.wifi.access.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -13,10 +14,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class DeviceManager {
 
+    private static final Logger log = LoggerFactory.getLogger(DeviceManager.class);
     private final TrafficInterceptor trafficInterceptor;
     private final RouterConnectionManager routerConnectionManager;
     private final UserRepository userRepository;

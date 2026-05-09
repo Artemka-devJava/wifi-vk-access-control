@@ -4,16 +4,17 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.wifi.access.config.SubscriptionConfig;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.concurrent.TimeUnit;
 
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class VkSubscriptionChecker {
+    private static final Logger log = LoggerFactory.getLogger(VkSubscriptionChecker.class);
 
     private final VkApiClient vkApiClient;
     private final SubscriptionConfig subscriptionConfig;

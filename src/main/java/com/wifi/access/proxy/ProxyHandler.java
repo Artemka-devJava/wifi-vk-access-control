@@ -13,16 +13,25 @@ import io.netty.handler.codec.http.HttpRequest;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpVersion;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 
-@Slf4j
-@RequiredArgsConstructor
+
 public class ProxyHandler extends SimpleChannelInboundHandler<HttpRequest> {
 
+    private static final Logger log = LoggerFactory.getLogger(ProxyHandler.class);
     private final AccessController accessController;
+
+    public ProxyHandler(AccessController accessController) {
+        this.accessController = accessController;
+    }
+
+    public ProxyHandler() {
+        this(null);
+    }
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, HttpRequest request) {

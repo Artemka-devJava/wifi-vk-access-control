@@ -3,17 +3,18 @@ package com.wifi.access.router;
 import com.wifi.access.config.ProxyConfig;
 import com.wifi.access.config.RouterConfig;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
-@Slf4j
 @RequiredArgsConstructor
 public class TrafficInterceptor {
 
+    private static final Logger log = LoggerFactory.getLogger(TrafficInterceptor.class);
     private final RouterConnectionManager routerConnectionManager;
     private final RouterConfig routerConfig;
     private final ProxyConfig proxyConfig;

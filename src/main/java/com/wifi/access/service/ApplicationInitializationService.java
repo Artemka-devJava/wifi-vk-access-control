@@ -4,7 +4,8 @@ import com.wifi.access.router.DeviceManager;
 import com.wifi.access.router.RouterConnectionManager;
 import com.wifi.access.router.TrafficInterceptor;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -14,10 +15,10 @@ import org.springframework.stereotype.Service;
  * Сервис инициализации и планирования задач приложения
  */
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class ApplicationInitializationService {
 
+    private static final Logger log = LoggerFactory.getLogger(ApplicationInitializationService.class);
     private final RouterConnectionManager routerConnectionManager;
     private final TrafficInterceptor trafficInterceptor;
     private final DeviceManager deviceManager;

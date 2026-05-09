@@ -4,7 +4,8 @@ import com.wifi.access.dto.AccessCheckResult;
 import com.wifi.access.entity.User;
 import com.wifi.access.service.AccessController;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,10 +20,10 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/auth")
-@Slf4j
 @RequiredArgsConstructor
 public class AuthController {
 
+    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
     private final AccessController accessController;
 
     /**

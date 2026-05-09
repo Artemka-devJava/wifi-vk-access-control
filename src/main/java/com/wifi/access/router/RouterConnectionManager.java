@@ -8,7 +8,8 @@ import com.jcraft.jsch.Session;
 import com.wifi.access.config.RouterConfig;
 import com.wifi.access.exception.RouterException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
@@ -16,10 +17,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 @Component
-@Slf4j
 @RequiredArgsConstructor
 public class RouterConnectionManager {
 
+    private static final Logger log = LoggerFactory.getLogger(RouterConnectionManager.class);
     private final RouterConfig routerConfig;
     private Session session;
 
