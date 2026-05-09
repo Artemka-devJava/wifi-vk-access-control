@@ -34,16 +34,22 @@ public class ApplicationInitializationService {
 
         try {
             // Подключаемся к роутеру
-            routerConnectionManager.connect();
-            log.info("✓ Connected to router");
+            try {
+                routerConnectionManager.connect();
+                log.info("✓ Connected to router");
 
-            // Устанавливаем правила перехвата трафика
-            trafficInterceptor.setupTrafficInterception();
-            log.info("✓ Traffic interception rules installed");
+                // Устанавливаем правила перехвата трафика
+                trafficInterceptor.setupTrafficInterception();
+                log.info("✓ Traffic interception rules installed");
 
-            // Сканируем подключенные устройства
-            deviceManager.scanConnectedDevices();
-            log.info("✓ Connected devices scanned");
+                // Сканируем подключенные устройства
+                deviceManager.scanConnectedDevices();
+                log.info("✓ Connected devices scanned");
+            } catch (Exception e) {
+                log.warn("⚠ Could not connect to router. Running in development mode.", e);
+                log.warn("  Make sure router is accessible at configured address");
+                log.warn("  The application will continue without live device management");
+            }
 
             log.info("============================================");
             log.info("WiFi VK Access Control Service Ready!");

@@ -4,26 +4,22 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.wifi.access.config.VkApiConfig;
 import com.wifi.access.exception.VkApiException;
-import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @Component
-@RequiredArgsConstructor
 public class VkApiClient {
 
-    private static final Logger log = LoggerFactory.getLogger(VkApiClient.class);
     private final VkApiConfig config;
-    private OkHttpClient httpClient;
+    private final OkHttpClient httpClient;
 
     public VkApiClient(VkApiConfig config) {
         this.config = config;
@@ -33,6 +29,8 @@ public class VkApiClient {
                 .readTimeout(10, TimeUnit.SECONDS)
                 .build();
     }
+
+    // ...existing code...
 
     /**
      * Проверяет, подписан ли пользователь на группу
@@ -60,7 +58,15 @@ public class VkApiClient {
                     throw new VkApiException("VK API returned status " + response.code());
                 }
 
-                String responseBody = response.body().string();
+                String responseBody = null;
+                if (response.body() != null) {
+                    responseBody = response.body().string();
+                }
+
+                if (responseBody == null) {
+                    throw new VkApiException("Empty response from VK API");
+                }
+
                 JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
 
                 if (jsonObject.has("error")) {
@@ -90,7 +96,7 @@ public class VkApiClient {
                     "%s/messages.send?user_id=%d&message=%s&access_token=%s&v=%s&random_id=%d",
                     config.getBaseUrl(),
                     userId,
-                    java.net.URLEncoder.encode(message, "UTF-8"),
+                    java.net.URLEncoder.encode(message, StandardCharsets.UTF_8),
                     config.getAccessToken(),
                     config.getApiVersion(),
                     System.nanoTime()
@@ -106,7 +112,15 @@ public class VkApiClient {
                     throw new VkApiException("VK API returned status " + response.code());
                 }
 
-                String responseBody = response.body().string();
+                String responseBody = null;
+                if (response.body() != null) {
+                    responseBody = response.body().string();
+                }
+
+                if (responseBody == null) {
+                    throw new VkApiException("Empty response from VK API");
+                }
+
                 JsonObject jsonObject = JsonParser.parseString(responseBody).getAsJsonObject();
 
                 if (jsonObject.has("error")) {

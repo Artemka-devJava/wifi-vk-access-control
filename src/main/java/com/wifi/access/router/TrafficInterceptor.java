@@ -65,7 +65,7 @@ public class TrafficInterceptor {
             log.info("Traffic interception rules installed on interface {}",
                     routerConfig.getWifiInterface());
         } catch (Exception e) {
-            log.error("Failed to setup traffic interception", e);
+            log.warn("Failed to setup traffic interception rules - running in development mode", e);
         }
     }
 
